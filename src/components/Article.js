@@ -1,27 +1,31 @@
-import React, {Component} from 'react'
+import React, {Component, PureComponent} from 'react'
 
-class Article extends Component{
+class Article extends PureComponent{
     constructor(props) {
         super(props)
         this.state = {
-            isOpen: props.defaultOpen
+            count: 0
         }
-        this.handleClick = handleClick.bind(this)
+        this.incrementCounter = incrementCounter.bind(this)
     }
-
+    // shouldComponentUpdate(nextProps,nextState){
+    //     return this.state.isOpen !== nextState.isOpen
+    // }
     componentWillMount(){
         console.log('-------mount')
     }
 
     render(){
-        const {article} = this.props
-        const body = this.state.isOpen && <section className = "card-text">{article.text}</section>
+        const {article, isOpen, onButtonClick} = this.props
+        const body = isOpen && <section className = "card-text">{article.text}</section>
         return (
-            <div className = 'card mx-auto' style = {{width : '60%'}}>
+            <div className = 'card mx-auto' style = {{width : '90%'}}>
                 <div className = 'card-header'>
-                    <h2>   {article.title}
-                        <button onClick={this.handleClick} className = "btn btn-primary btn-lg float-right">
-                            {this.state.isOpen ? "close" : "open"}
+                    <h2 onClick = {this.incrementCounter}>   
+                        {article.title}
+                        clicked {this.state.count}
+                        <button onClick={onButtonClick} className = "btn btn-primary btn-lg float-right">
+                            {isOpen ? "close" : "open"}
                         </button>
                     </h2>
                 </div>
@@ -35,10 +39,10 @@ class Article extends Component{
         )
     }
 }
-function handleClick (){
-    console.log('-----clicked')
+function incrementCounter(){
     this.setState({
-        isOpen: !this.state.isOpen
+        count: this.state.count + 1
     })
 }
+
 export default Article
